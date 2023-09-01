@@ -8,21 +8,31 @@ const authController = {
       const token = await authService.genAuthToken(user);
       // send verification email
       res.cookie('x-access-token', token).status(httpStatus.CREATED).send({
+        status: 'Success',
         user,
         token,
       });
-      // res.json({
-      //   status: 'Success',
-      //   message: 'User Registered Successfully',
-      //   result: user,
-      // });
     } catch (error) {
-      // res.json({
-      //   status: 'Failed',
-      //   message: 'User Registered Unsuccessfully',
-      //   result: error.message,
-      // });
-       res.status(httpStatus.BAD_REQUEST).send(error.message);
+      res
+        .status(httpStatus.BAD_REQUEST)
+        .send({ status: 'Failed', error: error.message });
+    }
+  },
+  async signin(req, res, next) {
+    try {
+      const { email, password } = req.body;
+      const user = await authService.signInWithEmailAndPassword(
+        email,
+        password
+      );
+      const token = await authService.genAuthToken(user);
+      res
+        .cookie('x-access-token', token)
+        .send({ Status: 'Success', user, token });
+    } catch (error) {
+      res
+        .status(httpStatus.BAD_REQUEST)
+        .send({ status: 'Failed', error: error.message });
     }
   },
 };
