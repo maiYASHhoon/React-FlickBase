@@ -12,9 +12,8 @@ const authController = {
         token,
       });
     } catch (error) {
-      //   res
-      //     .status(httpStatus.BAD_REQUEST)
-      //     .send({ status: 'Failed', error: error.message });
+      //console.log(error.message)
+      // res.status(httpStatus.BAD_REQUEST).send(error.message)
       next(error);
     }
   },
@@ -28,11 +27,13 @@ const authController = {
       const token = await authService.genAuthToken(user);
       res.cookie('x-access-token', token).send({ user, token });
     } catch (error) {
-      // res
-      //   .status(httpStatus.BAD_REQUEST)
-      //   .send({ status: 'Failed', error: error.message });
+      // res.status(httpStatus.BAD_REQUEST).send(error.message)
       next(error);
     }
+  },
+  async isauth(req, res, next) {
+    console.log(req)
+    res.json(req.user);
   },
 };
 module.exports = authController;

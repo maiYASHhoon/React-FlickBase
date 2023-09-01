@@ -18,8 +18,8 @@ app.use(mongoSanitize());
 //routes
 app.use('/api', routes);
 //Passport
-app.use(passport.initialize())
-passport.use('jwt', 'jwtStrategy');
+app.use(passport.initialize());
+passport.use('jwt', jwtStrategy);
 // error handling
 app.use(convertToApiError);
 app.use((err, req, res, next) => {
