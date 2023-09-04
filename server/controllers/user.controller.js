@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const { ApiError } = require('../middleware/apiError');
-const { userService, authService } = require('../services');
+const { userService, authService, emailService } = require('../services');
 const userController = {
   async profile(req, res, next) {
     try {
@@ -25,8 +25,7 @@ const userController = {
     try {
       const user = await userService.updateUserEmail(req);
       const token = await authService.genAuthToken(user);
-      //
-      console.log('Send Email to Verify');
+    await emailService.registerEmail(user.email, user)
       res.cookie('x-access-token', token).send({
         user: res.json(res.locals.permission.filter(user._doc)),
         token,
