@@ -14,7 +14,7 @@ mongoose.connection.on("close", () => {
 mongoose.connection.on("error", (error) => {
     console.log("Database ERROR: " + error);
 });
-
+mongoose.set('strictQuery', false);
 const initConnection = (callback) => {
     let options = {};
     if (process.env.isProduction == true || process.env.isProduction == "true") {
