@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +10,9 @@ import { errorHelper, Loader } from '../../utils/tools';
 import { registerUser, signInUser } from '../../store/action/user';
 const Auth = () => {
   const [register, setRegister] = useState(false);
+  let navigate = useNavigate();
   const users = useSelector((state) => state.users);
+  const notifications = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: { email: 'test@mail.com', password: 'Yash@123' },
@@ -30,6 +33,11 @@ const Auth = () => {
       dispatch(signInUser(values));
     }
   };
+  useEffect(() => {
+    if (notifications && notifications.global.success) {
+      navigate('/dashboard');
+    }
+  }, [notifications]);
   return (
     <>
       <div className="auth_container">
