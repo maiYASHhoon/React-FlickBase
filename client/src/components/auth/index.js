@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { errorHelper } from '../../utils/tools';
+import { errorHelper, Loader } from '../../utils/tools';
 import { registerUser, signInUser } from '../../store/action/user';
 const Auth = () => {
   const [register, setRegister] = useState(false);
-  const user = useSelector((state) => state.user);
+  const users = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: { email: 'test@mail.com', password: 'Yash@123' },
@@ -34,48 +34,52 @@ const Auth = () => {
     <>
       <div className="auth_container">
         <h1>Authenticate</h1>
-        <Box
-          sx={{
-            '& .MuiTextField-root': { width: '100%', marginTop: '20px' },
-          }}
-          component="form"
-          onSubmit={formik.handleSubmit}
-        >
-          <TextField
-            name="email"
-            label="Enter you email"
-            variant="outlined"
-            {...formik.getFieldProps('email')}
-            {...errorHelper(formik, 'email')}
-          />
-          <TextField
-            name="password"
-            label="Enter you Password"
-            type="password"
-            variant="outlined"
-            {...formik.getFieldProps('password')}
-            {...errorHelper(formik, 'password')}
-          />
-          <div className="mt-3">
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              size="large"
-            >
-              {register ? 'Register' : 'Login'}
-            </Button>
-            <Button
-              className="mt-3"
+        {users.loading ? (
+          <Loader />
+        ) : (
+          <Box
+            sx={{
+              '& .MuiTextField-root': { width: '100%', marginTop: '20px' },
+            }}
+            component="form"
+            onSubmit={formik.handleSubmit}
+          >
+            <TextField
+              name="email"
+              label="Enter you email"
               variant="outlined"
-              color="secondary"
-              size="small"
-              onClick={() => setRegister(!register)}
-            >
-              Want to {!register ? 'Register' : 'Login'}
-            </Button>
-          </div>
-        </Box>
+              {...formik.getFieldProps('email')}
+              {...errorHelper(formik, 'email')}
+            />
+            <TextField
+              name="password"
+              label="Enter you Password"
+              type="password"
+              variant="outlined"
+              {...formik.getFieldProps('password')}
+              {...errorHelper(formik, 'password')}
+            />
+            <div className="mt-3">
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                size="large"
+              >
+                {register ? 'Register' : 'Login'}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outlined"
+                color="secondary"
+                size="small"
+                onClick={() => setRegister(!register)}
+              >
+                Want to {!register ? 'Register' : 'Login'}
+              </Button>
+            </div>
+          </Box>
+        )}
       </div>
     </>
   );

@@ -1,3 +1,4 @@
+import CircularProgress from '@mui/material/CircularProgress';
 export const errorHelper = (formik, values) => ({
   error: formik.errors[values] && formik.touched[values] ? true : false,
   helperText:
@@ -5,3 +6,8 @@ export const errorHelper = (formik, values) => ({
       ? formik.errors[values]
       : null,
 });
+export const Loader = () => (
+  <div className="root_loader">
+    <CircularProgress />
+  </div>
+);

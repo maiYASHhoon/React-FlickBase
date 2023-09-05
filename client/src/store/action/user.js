@@ -1,4 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import {
+  errorGlobal,
+  successGlobal,
+  clearNotification,
+} from '../reducers/notifications';
 import axios from 'axios';
 export const registerUser = createAsyncThunk(
   'users/registerUser',
@@ -11,8 +16,10 @@ export const registerUser = createAsyncThunk(
           password: password,
         }
       );
-       return { data: request.data.user, auth: true };
+      dispatch(successGlobal('Welcome !!!'));
+      return { data: request.data.user, auth: true };
     } catch (error) {
+      dispatch(errorGlobal(error.response.data.message));
       throw error;
     }
   }
@@ -28,8 +35,10 @@ export const signInUser = createAsyncThunk(
           password: password,
         }
       );
+      dispatch(successGlobal('Welcome !!!'));
       return { data: request.data.user, auth: true };
     } catch (error) {
+      dispatch(errorGlobal(error.response.data.message));
       throw error;
     }
   }
