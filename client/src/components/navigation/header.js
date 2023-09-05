@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import SideDrawer from './sideNavigation';
 const Header = () => {
   return (
     <nav className="navbar fixed-top">
@@ -8,6 +9,7 @@ const Header = () => {
       >
         Flickbase
       </Link>
+      <SideDrawer />
     </nav>
   );
 };
