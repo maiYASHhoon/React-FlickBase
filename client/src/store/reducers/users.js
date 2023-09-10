@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, signInUser, isAuth } from '../action/user';
+import { registerUser, signInUser, isAuth, signOut } from '../action/user';
 let DEFAULT_USER_STATE = {
   loading: false,
   data: {
@@ -55,6 +55,12 @@ export const usersSlice = createSlice({
       .addCase(isAuth.rejected, (state) => {
         state.loading = false;
       })
+      // SIGN OUT
+      .addCase(signOut.fulfilled, (state, action) => {
+        state.data = DEFAULT_USER_STATE.data;
+        state.auth = false;
+      });
+
   },
 });
 export default usersSlice.reducer;

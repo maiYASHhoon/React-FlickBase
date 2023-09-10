@@ -4,7 +4,9 @@ import SideDrawer from './sideNavigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearNotifications } from '../../store/reducers/notifications';
 import { showToast } from '../../utils/tools';
+import { signOut } from '../../store/action/user';
 const Header = () => {
+     const users = useSelector((state) => state.users);
   const notifications = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -20,6 +22,9 @@ const Header = () => {
       dispatch(clearNotifications());
     }
   }, [notifications]);
+   const signOutUser = () => {
+     dispatch(signOut());
+   };
   return (
     <nav className="navbar fixed-top">
       <Link
@@ -28,7 +33,10 @@ const Header = () => {
       >
         Flickbase
       </Link>
-      <SideDrawer />
+      <SideDrawer
+        users={users}
+        signOutUser={signOutUser}
+      />
     </nav>
   );
 };
