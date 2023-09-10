@@ -8,9 +8,10 @@ import Header from './components/navigation/header';
 import Home from './components/home';
 import Auth from './components/auth';
 import Dashboard from './components/dashboard';
-import AuthGuard from './hoc/authGuard';
 import AdminArticles from './components/dashboard/articles';
 import AdminProfile from './components/dashboard/profile';
+import DashboardMain from './components/dashboard/main';
+import AuthGuard from './hoc/authGuard';
 const Router = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
@@ -40,6 +41,10 @@ const Router = () => {
                   </AuthGuard>
                 }
               >
+                <Route
+                  index
+                  element={<DashboardMain />}
+                />
                 <Route
                   path="profile"
                   element={<AdminProfile />}

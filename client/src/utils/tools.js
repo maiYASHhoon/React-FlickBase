@@ -1,6 +1,6 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from 'react-toastify';
-import  cookie  from 'react-cookies';
+import cookie from 'react-cookies';
 export const errorHelper = (formik, values) => ({
   error: formik.errors[values] && formik.touched[values] ? true : false,
   helperText:
@@ -35,3 +35,8 @@ export const removeTokenCookie = () =>
 export const getAuthHeader = () => {
   return { headers: { Authorization: `Bearer ${getTokenCookie()}` } };
 };
+export const AdminTitle = ({ title }) => (
+  <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 className="h2">{title}</h1>
+  </div>
+);
