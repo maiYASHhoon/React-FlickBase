@@ -3,14 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { errorHelper, Loader } from '../../utils/tools';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { errorHelper, Loader } from '../../utils/tools';
 import { registerUser, signInUser } from '../../store/action/user';
+import PreventSignIn from '../../hoc/preventSignIn';
 const Auth = () => {
+  // comp
   const [register, setRegister] = useState(false);
   let navigate = useNavigate();
+  // redux
   const users = useSelector((state) => state.users);
   const notifications = useSelector((state) => state.notification);
   const dispatch = useDispatch();
@@ -39,7 +42,7 @@ const Auth = () => {
     }
   }, [notifications]);
   return (
-    <>
+    <PreventSignIn users={users}>
       <div className="auth_container">
         <h1>Authenticate</h1>
         {users.loading ? (
@@ -89,7 +92,7 @@ const Auth = () => {
           </Box>
         )}
       </div>
-    </>
+    </PreventSignIn>
   );
 };
 export default Auth;

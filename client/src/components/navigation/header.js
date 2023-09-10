@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SideDrawer from './sideNavigation';
+import { showToast } from '../../utils/tools';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearNotifications } from '../../store/reducers/notifications';
-import { showToast } from '../../utils/tools';
 import { signOut } from '../../store/action/user';
 const Header = () => {
-     const users = useSelector((state) => state.users);
+  const users = useSelector((state) => state.users);
   const notifications = useSelector((state) => state.notification);
   const dispatch = useDispatch();
+  let navigate = useNavigate();
   useEffect(() => {
     let { global } = notifications;
     if (notifications && global.error) {
@@ -22,9 +23,10 @@ const Header = () => {
       dispatch(clearNotifications());
     }
   }, [notifications]);
-   const signOutUser = () => {
-     dispatch(signOut());
-   };
+  const signOutUser = () => {
+    dispatch(signOut());
+    navigate('/');
+  };
   return (
     <nav className="navbar fixed-top">
       <Link

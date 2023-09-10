@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { isAuth } from './store/action/user';
 import { Loader } from './utils/tools';
 import MainLayout from './hoc/mainLayout';
@@ -8,6 +8,7 @@ import Header from './components/navigation/header';
 import Home from './components/home';
 import Auth from './components/auth';
 import Dashboard from './components/dashboard';
+import AuthGuard from './hoc/authGuard';
 const Router = () => {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
@@ -31,7 +32,11 @@ const Router = () => {
             <Routes>
               <Route
                 path="/dashboard"
-                element={<Dashboard />}
+                element={
+                  <AuthGuard>
+                    <Dashboard />
+                  </AuthGuard>
+                }
               />
               <Route
                 path="/auth"
