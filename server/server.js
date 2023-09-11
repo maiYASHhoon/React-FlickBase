@@ -10,6 +10,8 @@ const routes = require('./routes');
 const { handleError, convertToApiError } = require('./middleware/apiError');
 const passport = require('passport');
 const { jwtStrategy } = require('./middleware/passport');
+var cors = require('cors');
+app.use(cors());
 // PARSING
 app.use(bodyParser.json());
 // SANITIZE

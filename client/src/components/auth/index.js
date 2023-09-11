@@ -1,15 +1,24 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { errorHelper, Loader } from '../../utils/tools';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { errorHelper } from '../../utils/tools';
+import { registerUser, signInUser } from '../../store/action/user';
+import PreventSignIn from '../../hoc/preventSignIn';
 const Auth = () => {
+  // comp
   const [register, setRegister] = useState(false);
+  let navigate = useNavigate();
+  // redux
+  const users = useSelector((state) => state.users);
+  const notifications = useSelector((state) => state.notification);
+  const dispatch = useDispatch();
   const formik = useFormik({
-    initialValues: { email: '', password: '' },
+    initialValues: { email: 'test@mail.com', password: 'Yash@123' },
     validationSchema: Yup.object({
       email: Yup.string()
         .required('Sorry the email is required')
@@ -22,59 +31,68 @@ const Auth = () => {
   });
   const handleSubmit = (values) => {
     if (register) {
-      console.log(values, 'register');
+      dispatch(registerUser(values));
     } else {
-      console.log(values, 'sign in');
+      dispatch(signInUser(values));
     }
   };
+  useEffect(() => {
+    if (notifications && notifications.global.success) {
+      navigate('/dashboard');
+    }
+  }, [notifications]);
   return (
-    <>
+    <PreventSignIn users={users}>
       <div className="auth_container">
         <h1>Authenticate</h1>
-        <Box
-          sx={{
-            '& .MuiTextField-root': { width: '100%', marginTop: '20px' },
-          }}
-          component="form"
-          onSubmit={formik.handleSubmit}
-        >
-          <TextField
-            name="email"
-            label="Enter you email"
-            variant="outlined"
-            {...formik.getFieldProps('email')}
-            {...errorHelper(formik, 'email')}
-          />
-          <TextField
-            name="password"
-            label="Enter you Password"
-            type="password"
-            variant="outlined"
-            {...formik.getFieldProps('password')}
-            {...errorHelper(formik, 'password')}
-          />
-          <div className="mt-3">
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              size="large"
-            >
-              {register ? 'Register' : 'Login'}
-            </Button>
-            <Button
-              className="mt-3"
+        {users.loading ? (
+          <Loader />
+        ) : (
+          <Box
+            sx={{
+              '& .MuiTextField-root': { width: '100%', marginTop: '20px' },
+            }}
+            component="form"
+            onSubmit={formik.handleSubmit}
+          >
+            <TextField
+              name="email"
+              label="Enter you email"
               variant="outlined"
-              color="secondary"
-              size="small"
-              onClick={() => setRegister(!register)}
-            >
-              Want to {!register ? 'Register' : 'Login'}
-            </Button>
-          </div>
-        </Box>
+              {...formik.getFieldProps('email')}
+              {...errorHelper(formik, 'email')}
+            />
+            <TextField
+              name="password"
+              label="Enter you Password"
+              type="password"
+              variant="outlined"
+              {...formik.getFieldProps('password')}
+              {...errorHelper(formik, 'password')}
+            />
+            <div className="mt-3">
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                size="large"
+              >
+                {register ? 'Register' : 'Login'}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outlined"
+                color="secondary"
+                size="small"
+                onClick={() => setRegister(!register)}
+              >
+                Want to {!register ? 'Register' : 'Login'}
+              </Button>
+            </div>
+          </Box>
+        )}
       </div>
-    </>
+    </PreventSignIn>
   );
 };
 export default Auth;
