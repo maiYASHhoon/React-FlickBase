@@ -62,7 +62,16 @@ const AddArticle = () => {
           <WYSIWYG
             setEditorState={(state) => handleEditorState(state)}
             setEditorBlur={(blur) => handleEditorBlur(blur)}
+            onError = {formik.errors.content}
+            editorBlur={editorBlur}
           />
+          {
+            formik.errors.content || (formik.errors.content && editorBlur) ?
+            <FormHelperText error={true}>
+              {formik.errors.content}
+            </FormHelperText>
+            : null
+          }
         </div>
         <div className="form-group">
           <TextField
