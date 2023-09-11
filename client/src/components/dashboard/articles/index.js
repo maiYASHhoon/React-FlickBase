@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { AdminTitle } from '../../../utils/tools';
 import PaginateComponent from './paginate';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPaginateArticles } from '../../../store/action/articles';
+import {
+  getPaginateArticles,
+  changeStatusArticle,
+} from '../../../store/action/articles';
 import {
   Modal,
   Button,
@@ -27,6 +30,10 @@ const AdminArticles = () => {
   };
   const goToEdit = (id) => {
     navigate(`/dashboard/articles/edit/${id}`);
+  };
+  const handleStatusChange = (status, _id) => {
+    let newStatus = status === 'draft' ? 'public' : 'draft';
+    dispatch(changeStatusArticle({ newStatus, _id }));
   };
   //// END PAGINATION COMMANDS
   useEffect(() => {
@@ -58,6 +65,7 @@ const AdminArticles = () => {
             goToPrevPage={(page) => goToPrevPage(page)}
             goToNextPage={(page) => goToNextPage(page)}
             goToEdit={(id) => goToEdit(id)}
+            handleStatusChange={(status, id) => handleStatusChange(status, id)}
           />
         </>
       </div>
