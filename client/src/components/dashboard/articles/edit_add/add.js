@@ -7,6 +7,7 @@ import WYSIWYG from '../../../../utils/form/wysiwyg';
 // redux
 import { validation, formValues } from './validationSchema';
 import { useDispatch, useSelector } from 'react-redux';
+import { addArticle } from '../../../../store/action/articles';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -20,18 +21,24 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import InputLabel from '@mui/material/InputLabel';
 import AddIcon from '@mui/icons-material/Add';
-import { visuallyHidden } from '@mui/utils';
+// import { visuallyHidden } from '@mui/utils';
 const AddArticle = () => {
   const [editorBlur, setEditorBlur] = useState(false);
   const articles = useSelector((state) => state.articles);
   const dispatch = useDispatch();
   const actorsValue = useRef('');
+  let navigate = useNavigate();
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: formValues,
     validationSchema: validation,
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
+      dispatch(addArticle(values))
+        .unwrap()
+        .then(() => {
+          navigate('/dashboard/articles');
+        });
     },
   });
   const handleEditorState = (state) => {
@@ -62,16 +69,14 @@ const AddArticle = () => {
           <WYSIWYG
             setEditorState={(state) => handleEditorState(state)}
             setEditorBlur={(blur) => handleEditorBlur(blur)}
-            onError = {formik.errors.content}
+            onError={formik.errors.content}
             editorBlur={editorBlur}
           />
-          {
-            formik.errors.content || (formik.errors.content && editorBlur) ?
+          {formik.errors.content || (formik.errors.content && editorBlur) ? (
             <FormHelperText error={true}>
               {formik.errors.content}
             </FormHelperText>
-            : null
-          }
+          ) : null}
         </div>
         <div className="form-group">
           <TextField
@@ -170,13 +175,17 @@ const AddArticle = () => {
           ) : null}
         </FormControl>
         <Divider className="mt-3 mb-3" />
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-        >
-          Add article
-        </Button>
+        {articles.loading ? (
+          <Loader />
+        ) : (
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Add article
+          </Button>
+        )}
       </form>
     </>
   );
