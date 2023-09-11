@@ -3,6 +3,8 @@ import { useFormik, FieldArray, FormikProvider } from 'formik';
 import { AdminTitle } from '../../../../utils/tools';
 import { useNavigate } from 'react-router-dom';
 import { errorHelper, Loader } from '../../../../utils/tools';
+import WYSIWYG from '../../../../utils/form/wysiwyg';
+// redux
 import { validation, formValues } from './validationSchema';
 import { useDispatch, useSelector } from 'react-redux';
 import TextField from '@mui/material/TextField';
@@ -20,6 +22,7 @@ import InputLabel from '@mui/material/InputLabel';
 import AddIcon from '@mui/icons-material/Add';
 import { visuallyHidden } from '@mui/utils';
 const AddArticle = () => {
+  const [editorBlur, setEditorBlur] = useState(false);
   const articles = useSelector((state) => state.articles);
   const dispatch = useDispatch();
   const actorsValue = useRef('');
@@ -31,6 +34,12 @@ const AddArticle = () => {
       console.log(values);
     },
   });
+  const handleEditorState = (state) => {
+    formik.setFieldValue('content', state, true);
+  };
+  const handleEditorBlur = (blur) => {
+    setEditorBlur(true);
+  };
   return (
     <>
       <AdminTitle title="Add article" />
@@ -48,7 +57,13 @@ const AddArticle = () => {
             {...errorHelper(formik, 'title')}
           />
         </div>
-        <div className="form-group">WYSIWYG(What You See is What you Get)</div>
+        <div className="form-group">
+          WYSIWYG(What You See is What you Get)
+          <WYSIWYG
+            setEditorState={(state) => handleEditorState(state)}
+            setEditorBlur={(blur) => handleEditorBlur(blur)}
+          />
+        </div>
         <div className="form-group">
           <TextField
             style={{ width: '100%' }}
