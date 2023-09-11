@@ -16,6 +16,7 @@ const WYSIWYG = (props) => {
     });
     props.setEditorState(HTMLdata);
   };
+  useEffect(() => {}, [props.editorContent]);
   const checkError = () => {
     if (props.onError || (props.onError && props.editorBlur)) {
       return true;
