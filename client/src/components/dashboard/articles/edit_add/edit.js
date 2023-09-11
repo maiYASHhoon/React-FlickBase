@@ -6,7 +6,10 @@ import { errorHelper, Loader } from '../../../../utils/tools';
 import { validation, formValues } from './validationSchema';
 import WYSIWYG from '../../../../utils/form/wysiwyg';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAdminArticle } from '../../../../store/action/articles';
+import {
+  getAdminArticle,
+  updateArticle,
+} from '../../../../store/action/articles';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -26,8 +29,6 @@ const EditArticle = () => {
   const [formData, setFormData] = useState(formValues);
   const [editorContent, setEditorContent] = useState(null);
   const [editorBlur, setEditorBlur] = useState(false);
-  // redux
-  const articles = useSelector((state) => state.articles);
   const dispatch = useDispatch();
   const actorsValue = useRef('');
   let { articleId } = useParams();
@@ -36,11 +37,7 @@ const EditArticle = () => {
     initialValues: formData,
     validationSchema: validation,
     onSubmit: (values) => {
-      // dispatch(addArticle(values))
-      // .unwrap()
-      // .then(()=>{
-      //     navigate('/dashboard/articles')
-      // })
+      dispatch(updateArticle({ values, articleId }));
     },
   });
   const handleEditorState = (state) => {
@@ -54,9 +51,8 @@ const EditArticle = () => {
       .unwrap()
       .then((response) => {
         setLoading(false);
-        // setFormData(response);
-        // setEditorContent(response.content);
-        console.log('123', response)
+        setFormData(response);
+        setEditorContent(response.content);
       });
   }, [dispatch, articleId]);
   return (

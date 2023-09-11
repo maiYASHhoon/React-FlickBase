@@ -4,8 +4,9 @@ import {
   successGlobal,
   clearNotification,
 } from '../reducers/notifications';
-import { getAuthHeader, removeTokenCookie} from '../../utils/tools';
+import { getAuthHeader, removeTokenCookie } from '../../utils/tools';
 import axios from 'axios';
+import cookie from 'react-cookies';
 var BASE_URL = `http://localhost:3002/api/`;
 export const registerUser = createAsyncThunk(
   'users/registerUser',
@@ -16,6 +17,7 @@ export const registerUser = createAsyncThunk(
         password: password,
       });
       dispatch(successGlobal('Welcome !!!'));
+      cookie.save('x-access-token', request.data.token, { path: '/' });
       return { data: request.data.user, auth: true };
     } catch (error) {
       dispatch(errorGlobal(error.response.data.message));
@@ -32,6 +34,7 @@ export const signInUser = createAsyncThunk(
         password: password,
       });
       dispatch(successGlobal('Welcome !!!'));
+      cookie.save('x-access-token', request.data.token, { path: '/' });
       return { data: request.data.user, auth: true };
     } catch (error) {
       dispatch(errorGlobal(error.response.data.message));
@@ -41,10 +44,10 @@ export const signInUser = createAsyncThunk(
 );
 export const isAuth = createAsyncThunk('users/isAuth', async () => {
   try {
-    const request = await axios.get(`${BASE_URL}auth/isauth`, getAuthHeader())
-    return { data: request.data, auth:true}
+    const request = await axios.get(`${BASE_URL}auth/isauth`, getAuthHeader());
+    return { data: request.data, auth: true };
   } catch (error) {
-    return { data: {}, auth: false}
+    return { data: {}, auth: false };
   }
 });
 export const signOut = createAsyncThunk('users/signOut', async () => {
