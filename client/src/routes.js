@@ -12,6 +12,7 @@ import AdminArticles from './components/dashboard/articles';
 import AdminProfile from './components/dashboard/profile';
 import DashboardMain from './components/dashboard/main';
 import AddArticle from './components/dashboard/articles/edit_add/add';
+import EditArticle from './components/dashboard/articles/edit_add/edit';
 import AuthGuard from './hoc/authGuard';
 const Router = () => {
   const [loading, setLoading] = useState(true);
@@ -58,6 +59,10 @@ const Router = () => {
                   path="articles/add"
                   element={<AddArticle />}
                 />
+                <Route
+                  path="articles/edit/:articleId"
+                  element={<EditArticle />}
+                />9
               </Route>
               <Route
                 path="/auth"

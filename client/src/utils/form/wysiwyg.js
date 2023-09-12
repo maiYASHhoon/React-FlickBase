@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-/// wysiwyg
+import { htmlDecode } from '../tools';
 import { EditorState, ContentState } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import { Editor } from 'react-draft-wysiwyg';
@@ -16,6 +16,19 @@ const WYSIWYG = (props) => {
     });
     props.setEditorState(HTMLdata);
   };
+  useEffect(() => {
+    if (props.editorContent) {
+      const blockFromHtml = htmlToDraft(htmlDecode(props.editorContent));
+      const { contentBlocks, entityMap } = blockFromHtml;
+      const contentState = ContentState.createFromBlockArray(
+        contentBlocks,
+        entityMap
+      );
+      setEditorData({
+        editorState: EditorState.createWithContent(contentState),
+      });
+    }
+  }, [props.editorContent]);
   const checkError = () => {
     if (props.onError || (props.onError && props.editorBlur)) {
       return true;
