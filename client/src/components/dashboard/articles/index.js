@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getPaginateArticles,
   changeStatusArticle,
+  removeArticle,
 } from '../../../store/action/articles';
 import {
   Modal,
@@ -20,6 +21,13 @@ const AdminArticles = () => {
   const articles = useSelector((state) => state.articles);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [removeAlert, setRemoveAlert] = useState(false);
+  const [toRemove, setToRemove] = useState(null);
+  const handleClose = () => setRemoveAlert(false);
+  const handleShow = (id = null) => {
+    setToRemove(id);
+    setRemoveAlert(true);
+  };
   //// START PAGINATION COMMANDS
   const goToPrevPage = (page) => {
     dispatch(getPaginateArticles({ page }));
@@ -34,6 +42,14 @@ const AdminArticles = () => {
   const handleStatusChange = (status, _id) => {
     let newStatus = status === 'draft' ? 'public' : 'draft';
     dispatch(changeStatusArticle({ newStatus, _id }));
+  };
+  const handleDelete = () => {
+    dispatch(removeArticle(toRemove))
+      .unwrap()
+      .finally(() => {
+        setRemoveAlert(false);
+        setToRemove(null);
+      });
   };
   //// END PAGINATION COMMANDS
   useEffect(() => {
@@ -66,8 +82,32 @@ const AdminArticles = () => {
             goToNextPage={(page) => goToNextPage(page)}
             goToEdit={(id) => goToEdit(id)}
             handleStatusChange={(status, id) => handleStatusChange(status, id)}
+            handleShow={(id) => handleShow(id)}
           />
         </>
+        <Modal
+          show={removeAlert}
+          onHide={handleClose}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Are you Really Sure!!!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>There is no Going back</Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={handleClose}
+            >
+              Ops, Close This
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => handleDelete()}
+            >
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </>
   );
