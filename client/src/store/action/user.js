@@ -4,6 +4,7 @@ import {
   successGlobal,
   clearNotification,
 } from '../reducers/notifications';
+import { setVerify } from '../reducers/users';
 import { getAuthHeader, removeTokenCookie } from '../../utils/tools';
 import axios from 'axios';
 import cookie from 'react-cookies';
@@ -91,6 +92,22 @@ export const changeEmail = createAsyncThunk(
         email: request.data.user.email,
         verified: false,
       };
+    } catch (error) {
+      dispatch(errorGlobal(error.response.data.message));
+      throw error;
+    }
+  }
+);
+export const accountVerify = createAsyncThunk(
+  'users/accountVerify',
+  async (token, { dispatch, getState }) => {
+    try {
+      const user = getState().users.auth;
+      await axios.get(`${BASE_URL}/api/users/verify?validation=${token}`);
+      if (user) {
+        dispatch(setVerify());
+      }
+      dispatch(successGlobal('Account verified !!'));
     } catch (error) {
       dispatch(errorGlobal(error.response.data.message));
       throw error;

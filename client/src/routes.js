@@ -7,6 +7,7 @@ import MainLayout from './hoc/mainLayout';
 import Header from './components/navigation/header';
 import Home from './components/home';
 import Auth from './components/auth';
+import AccountVerify from './components/auth/verification';
 import Article from './components/articles/article';
 import Dashboard from './components/dashboard';
 import AdminArticles from './components/dashboard/articles';
@@ -66,6 +67,10 @@ const Router = () => {
                 />
                 9
               </Route>
+              <Route
+                path="/verification"
+                element={<AccountVerify />}
+              />
               <Route
                 path="/articles/article/:id"
                 element={<Article />}
