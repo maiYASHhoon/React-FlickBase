@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { homeLoadMore } from '../../store/action/articles';
+import ArticleCard from '../../utils/articleCard';
 const Home = () => {
   const articles = useSelector((state) => state.articles);
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Home = () => {
                 sm={6}
                 lg={3}
               >
-                {item.title}
+                <ArticleCard article={item} />
               </Grid>
             ))
           : null}
